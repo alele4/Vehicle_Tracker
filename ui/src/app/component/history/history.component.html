@@ -1,0 +1,122 @@
+<div class="example-header">
+  <md-select class="width400" placeholder="Vehicle" [(ngModel)]="dataSource.selectedValue" (change)="refresh()" name="vehicle">
+    <md-option *ngFor="let vehicle of readingsData.vehicleData" [value]="vehicle.value">
+      {{vehicle.viewValue}}
+    </md-option>
+  </md-select>
+</div>
+<div class="example-header">
+    <md-input-container>
+      <input mdInput #filter placeholder="Filter Last Updated(hr)" [(ngModel)]="dataSource.timeInHours" (change)="refresh()"/>
+    </md-input-container>
+    <md-input-container>
+      <input mdInput #filter placeholder="Filter Last Updated(min)" [(ngModel)]="dataSource.timeInMinutes" (change)="refresh()"/>
+    </md-input-container>
+</div>
+<div class="example-container mat-elevation-z8">
+  <md-table #table [dataSource]="dataSource" mdSort>
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- ID Column -->
+    <ng-container cdkColumnDef="vehicleId">
+      <md-header-cell *cdkHeaderCellDef md-sort-header  class="id_style"> ID </md-header-cell>
+      <md-cell  class="id_style" *cdkCellDef="let row"> {{row.vehicleId}} </md-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container cdkColumnDef="vehicleName">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Vehicle Name </md-header-cell>
+      <md-cell *cdkCellDef="let row"> {{row.vehicleName}} </md-cell>
+    </ng-container>
+
+    <!-- Timestamp Column -->
+    <ng-container cdkColumnDef="timestamp">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Timestamp </md-header-cell>
+      <md-cell *cdkCellDef="let row"> {{row.timestamp.toLocaleString()}} </md-cell>
+    </ng-container>
+
+    <!-- Priority Column -->
+    <ng-container cdkColumnDef="latitude">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Latitude </md-header-cell>
+      <md-cell *cdkCellDef="let row" > {{row.latitude.toFixed(2)}} </md-cell>
+    </ng-container>
+<!-- component Column -->
+    <ng-container cdkColumnDef="longitude">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Longitude </md-header-cell>
+      <md-cell *cdkCellDef="let row" > {{row.longitude.toFixed(2)}} </md-cell>
+    </ng-container>
+<!-- Color Column -->
+    <ng-container cdkColumnDef="fuelVolume">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> FuelVolume </md-header-cell>
+      <md-cell *cdkCellDef="let row" > {{row.fuelVolume}} </md-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="speed">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Speed </md-header-cell>
+      <md-cell *cdkCellDef="let row" > {{row.speed}} </md-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="engineHp">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Engine Hp </md-header-cell>
+      <md-cell *cdkCellDef="let row" > {{row.engineHp}} </md-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="checkEngineLightOn">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Engine Light </md-header-cell>
+      <md-cell *cdkCellDef="let row"  > <span *ngIf="row.checkEngineLightOn">On</span>
+      <span *ngIf="!row.checkEngineLightOn">Off</span>
+      </md-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="cruiseControlOn">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Cruise Control </md-header-cell>
+      <md-cell *cdkCellDef="let row"  > <span *ngIf="row.cruiseControlOn">On</span>
+      <span *ngIf="!row.checkEngineLightOn">Off</span>
+      </md-cell>
+    </ng-container>
+<ng-container cdkColumnDef="engineCoolantLow">
+      <md-header-cell *cdkHeaderCellDef md-sort-header>Engine Coolant </md-header-cell>
+      <md-cell *cdkCellDef="let row"  > <span *ngIf="row.engineCoolantLow">Low</span>
+      <span *ngIf="!row.checkEngineLightOn">High</span>
+      </md-cell>
+    </ng-container>
+    <ng-container cdkColumnDef="engineRpm">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Engine Rpm </md-header-cell>
+      <md-cell *cdkCellDef="let row" > {{row.engineRpm}} </md-cell>
+    </ng-container>
+    <ng-container cdkColumnDef="frontLeft">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> front Left pressure</md-header-cell>
+      <md-cell *cdkCellDef="let row" > {{row.frontLeft}} </md-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="frontRight">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> front Right pressure</md-header-cell>
+      <md-cell *cdkCellDef="let row" > {{row.frontRight}} </md-cell>
+    </ng-container>
+    <ng-container cdkColumnDef="rearLeft">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Rear Left pressure </md-header-cell>
+      <md-cell *cdkCellDef="let row" > {{row.rearLeft}} </md-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="rearRight">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Rear Right pressure</md-header-cell>
+      <md-cell *cdkCellDef="let row" > {{row.rearRight}} </md-cell>
+    </ng-container>
+
+    <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
+  </md-table>
+  <md-paginator #paginator
+                [length]="readingsData.data.length"
+                [pageIndex]="0"
+                [pageSize]="25"
+                [pageSizeOptions]="[1 , 5, 10, 25, 100]">
+  </md-paginator>
+</div>
+<div *ngIf="dataSource.getSortedData() && dataSource.getSortedData().length>0">
+<agm-map [latitude]="dataSource.getNewCenter().lat" [longitude]="dataSource.getNewCenter().lng"  [zoom]="dataSource.getNewZoom()" [latitude]="readingsData.data[0].latitude" [longitude]="readingsData.data[0].longitude">
+  <agm-marker *ngFor="let m of dataSource.getSortedData(); let i = index" [latitude]="m.latitude" [longitude]="m.longitude" [label]="m.timestamp.toLocaleString()"></agm-marker>
+</agm-map>
+</div>
